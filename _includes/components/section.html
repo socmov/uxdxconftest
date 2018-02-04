@@ -1,0 +1,155 @@
+<div class="section 
+  {{section.codename}}
+  
+  {% if section.cards.size > 0 %} cards-section {% endif %}
+  {% if section.testimonials.size > 0 %} testimonials-section {% endif %}
+  {% if section.buttons.size > 0 %} buttons-section {% endif %}
+  {% if section.stats.size > 0 %} stats-section {% endif %}
+  {% if section.data.size > 0 %} data-section {% endif %}
+  {% if section.image_rows.size > 0 %} image_rows-section {% endif %}
+  {% if section.form.size > 0 %} forms-section {% endif %}
+  {% if section.agenda.size > 0 %} agenda-section {% endif %}
+  {% if section.video_playlist.size > 0 %} video_playlist-section {% endif %}">
+
+  {% if section.image_rows.size == 0 %}
+  <div class="container">
+    <h2>
+      {{section.title}}
+    </h2>
+  {% endif %}
+
+    <!-- SECTION CONTENT -->
+    {% if section.content.size > 12 %}
+      {{section.content}} 
+    {% endif %}
+    
+    <!-- CARDS -->
+    {% if section.cards.size > 0 %}
+    <div class="d-flex justify-content-between flex-wrap">
+      {% for card in section.cards %}
+      <div class="card align-self-stretch {% if section.cards.size > 2 %} group3 {% elsif section.cards.size > 1 %} group2 {% endif %} {{card.codename}}">
+        <img class="card-img-top" src="{{card.card_image[0].url}}" alt="{{card.card_image[0].description}}">
+        <div class="card-body">
+          <h4 class="card-title">{{card.title}}</h4>
+          <h5 class="card-sub-title">{{card.sub_title}}</h5>
+          <p class="card-text">
+            {{card.content}}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} 
+
+    <!-- TESTIMONIALS -->
+    {% if section.testimonials.size > 0 %}
+    <div class="quotes">
+      <i class="fas fa-quote-left fa-3x" aria-hidden="true"></i>
+    </div>
+    <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        {% for tesimonial in section.testimonials %}
+        <li data-target="#testimonialCarousel" data-slide-to="{{forloop.index0}}" class="{% if forloop.first == true %}active{% endif %}"></li>
+        {% endfor %}
+      </ol>
+      <div class="carousel-inner d-flex">
+        {% for testimonial in section.testimonials %}
+        <div class="carousel-item {% if forloop.first == true %}active{% endif %} align-self-stretch">
+          <div class="client-description text-center">
+            <h5>{{testimonial.quote}}</h5>
+          </div>
+          <div class="client-name text-center">
+            <p>{{testimonial.source}}</p>
+            <img src="{{testimonial.company_logo[0].url}}" alt="{{testimonial.source}}" class="testimonial-logo">
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- BUTTONS -->
+    {% if section.buttons.size > 0 %}
+    {% for button in section.buttons %}
+    <a href="{{site.baseurl}}/{{button.url_link}}" class="btn {{button.class}}">{{button.button_text}}</a>
+    {% endfor %}
+    {% endif %}
+
+    <!-- STATS -->
+    {% if section.stats.size > 0 %}
+    <div class="d-flex justify-content-around flex-wrap">
+    {% for stat in section.stats %}
+      <div class="stat align-self-stretch">
+        <h3>{{stat.stat_number}}</h3>
+        <p class="lead">{{stat.stat_description}}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- DATA -->
+    {% if section.data.size > 0 %}
+    <div class="d-flex justify-content-around flex-wrap">
+    {% for dataType in section.data %}
+      {% assign items = site.data[dataType.data] | sort:dataType.sort %}
+      
+      {% for item in items %}
+        {% if dataType.filter_field.size > 3 %}
+          {% if item[dataType.filter_field] contains dataType.filter_value %}
+            {% include components/{{dataType.template}} item=item %}
+          {% endif %}
+        {% else %}
+          {% include components/{{dataType.template}} item=item %} 
+        {% endif %}
+      {% endfor %}
+
+    {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- IMAGE ROWS -->
+    {% if section.image_rows.size > 0 %}
+    <div class="section-fullwidth">
+      {% for imageRow in section.image_rows %}
+      <div class="d-flex">
+        {% for image in imageRow.image %}
+        <div class="image-flex {{image.class}}">
+          <img src="{{image.image[0].url}}" alt="{{image.image[0].description}}"> 
+        </div>
+        {% endfor %}
+      </div> 
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- FORMS -->
+    {% if section.form.size > 0 %} 
+      {% assign form = section.form[0].form_name | append: '.html' | prepend: 'forms/' %}
+      {% include {{form}} %}
+    {% endif %}
+
+    <!-- AGENDA -->
+    {% if section.agenda.size > 0 %}
+      {% assign agenda = site.data.agendas | where:"codename",section.agenda[0].codename %}
+      {% assign agenda = agenda[0] %}
+      {% include components/agenda.html agenda=agenda %}
+    {% endif %}
+
+    <!-- VIDEO PLAYLISTS -->
+    {% if section.video_playlist.size > 0 %}
+    <div class="d-flex justify-content-around flex-wrap">
+      {% for playlist in section.video_playlist %}
+      <div id="ypt_wrapper">
+        <div class="video">
+          <div id="player" data-pl="{{playlist.playlist_id}}"></div>
+        </div>
+        <ul id="ypt_thumbs"></ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  {% if section.image_rows.size == 0 %}
+  </div>
+  {% endif %}
+</div>

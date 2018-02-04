@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
+
+    {% include scripts/meta.html %}
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ site.baseurl }}/favicon.ico?">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+    <script src='https://js.tito.io/v1' async></script>
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
+
+    <script src="{{'/node_modules/jquery/dist/jquery.slim.js' | prepend: site.baseurl}}"></script>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'      
+}); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-M9MJLPW');</script>
+    <!-- End Google Tag Manager -->
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9MJLPW" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+      <a href="{{ site.baseurl }}/" class="navbar-brand">
+        <img src="{{ site.baseurl }}/images/UXDX-White-NoLogoText-NoText.svg"  width="30" height="30" alt="UXDX Conf 2018"/>
+      </a>
+      
+      <a class="navbar-brand" href="{{ site.baseurl }}/">UXDX Conf 2018</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#uxdxNav" aria-controls="uxdxNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="uxdxNav">
+        <ul class="navbar-nav ml-auto">
+          {% for page in site.data.conference.primary_menu[0].pages %}
+            <li class="nav-item">
+              {% if page.url_slug == 'tickets' %}
+                <a class="btn btn-outline-light" href="{{ site.baseurl }}/{{page.url_slug}}">{{page.url_slug | capitalize}}</a>
+              {% else %}
+                <a class="nav-link" href="{{ site.baseurl }}/{{page.url_slug}}">{{page.url_slug | capitalize}}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+    
+    <main role="main">
+      {{ content }}
+    </main>
+
+    {% include components/footer.html %}
+
+
+    <script src="{{'/node_modules/popper.js/dist/umd/popper.min.js' | prepend: site.baseurl}}"></script>
+    <script src="{{'/node_modules/bootstrap/dist/js/bootstrap.min.js' | prepend: site.baseurl}}"></script>
+    {% include scripts/video-script.html %}
+    {% include scripts/agenda_toggle.html %}
+
+
+    
+    <script type="text/javascript">
+
+      // (1)
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.register('/service-worker.js').then(function (reg) {
+          if (!reg.installing) return;
+          console.log("[*] ServiceWorker is installing...");
+
+          var worker = reg.installing;
+
+          worker.addEventListener('statechange', function () {
+            if (worker.state == 'redundant') {
+              console.log('[*] Install failed');
+            }
+            if (worker.state == 'installed') {
+              console.log('[*] Install successful!');
+            }
+            // (2)
+            if (worker.state == 'activated' && !navigator.serviceWorker.controller) {
+              console.log('[*] SW activated!');
+            }
+          });
+        });
+      }
+    </script>
+
+  </body>
+</html>

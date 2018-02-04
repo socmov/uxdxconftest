@@ -1,0 +1,16 @@
+---
+layout: default
+permalink: /agenda
+url_slug: agenda
+title: Challenge Your Assumptions
+---
+
+{% assign pageContent = site.data.pages | where: "url_slug", page.url_slug %} {% assign pageContent = pageContent[0] %}
+
+{% include components/pageTitle.html pageContent=pageContent %}
+{% if pageContent.header_image.size == 0 %}
+<div class= "container header-section {{pageContent.codename}}" >
+  <h1>{{pageContent.title}}</h1>
+</div >
+{% endif %}
+{% for section in pageContent.sections %} {% include components/section.html section = section %} {% endfor %}

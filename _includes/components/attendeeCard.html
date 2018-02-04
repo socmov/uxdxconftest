@@ -1,0 +1,18 @@
+<div class="attendee-box card align-self-stretch">
+  <img class="card-img-top attendee-profile" src="{{include.item.profile_image}}" alt="{{include.item.first_name}} {{include.item.last_name}}">
+  <div class="card-body">
+    <h4 class="card-title">
+      <a href="{{include.item.linkedin}}" rel="noopener" target="_blank">{{include.item.first_name}} {{include.item.last_name}} </a>
+    </h4>
+    <p class="card-text">
+      <small class="text-muted">{{include.item.job_title}},
+        <strong>{{include.item.company}}</strong>
+      </small>
+    </p>
+    {% if include.item.company_image.size > 10 %}
+    <div class="mt-auto">
+      <img src="{{include.item.company_image}}" alt="{{include.item.company}}" class="company-image">
+    </div>
+    {% endif %}
+  </div>
+</div>

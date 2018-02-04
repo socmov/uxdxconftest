@@ -1,0 +1,107 @@
+<div class="uxdx_agenda">
+
+  {% if include.agenda.dates.size > 1 or include.agenda.locations.size > 1 %}
+  <div class="nav-row d-flex flex-wrap justify-content-between">
+    {% if include.agenda.dates.size > 1 %}
+    <ul class="nav nav-tabs" role="tablist" id="pills-tab">
+      {% for date in include.agenda.dates %}
+      <li class="nav-item">
+        {% if forloop.first == true %}
+        <a class="nav-link active" id="{{date | date: "%a%d%b"}}-tab" data-toggle="pill" href="#{{date | date: "%a%d%b"}}" role="tab"
+          aria-controls="{{date | date: "%a%d%b"}}" aria-selected="true">{{date | date: "%a %d %b"}}</a>
+        {% else %}
+        <a class="nav-link" id="{{date | date: "%a%d%b"}}-tab" data-toggle="pill" href="#{{date | date: "%a%d%b"}}" role="tab"
+          aria-controls="{{date | date: "%a%d%b"}}">{{date | date: "%a %d %b"}}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if include.agenda.locations.size > 1 %}
+    <div class="btn-group-toggle stage-toggles" data-toggle="buttons">
+      Locations: {{include.agenda.locations.size}}
+      {% for location in include.agenda.locations %}
+      <label class="btn active {{location}}-toggle-button">
+        <input type="checkbox" checked autocomplete="off" id="{{location}}"> {{location}}
+      </label>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+  
+  
+  <div class="schedule__content schedule__content tab-content">
+    {% for date in include.agenda.dates %}
+    <div class="tab-pane fade  {% if forloop.first == true %} show active {% endif %}" id="{{date | date: "%a%d%b"}}" role="tabpanel"
+      aria-labelledby="{{date | date: "%a%d%b"}}-tab">
+      <!-- <h2><a name="{{date}}">{{date | date: "%a%d%b"}}</a></h2> -->
+      <div class="schedule__grid">
+        {% for startTime in agenda[date] %}
+        <div class="schedule__grid__section">
+          <div class="schedule__grid__content">
+            <div class="schedule__grid__time">{{startTime | date: "%H:%M" }}</div>
+            <div class="schedule__grid__events">
+              {% assign sortedSessions = include.agenda.start_times[startTime] | sort: 'location' | reverse %} {% for session in sortedSessions
+              %}
+              <div class="schedule__grid__event {{session.location}} {{session.session[0].type}}">
+                <div class="schedule__grid__event__photos">
+                {% if session.session[0].speakers.size == 1 %}
+                  <img src="{{session.session[0].speakers[0].profile_picture}}" alt="{{session.session[0].speakers[0].first_name}} {{session.session[0].speakers[0].last_name}}, {{session.session[0].speakers[0].job_title}}"
+                    class="profile_picture">
+                  <img src="{{session.session[0].speakers[0].company_logo}}" alt="{{session.session[0].speakers[0].company}}" class="company_logo"> {% elsif session.session[0].speakers.size > 1 %}
+                  <img src="{{site.baseurl}}/images/panel.jpg" alt="Panel Session" class="profile_picture"> 
+                {% endif %} 
+                </div>
+                <div class="schedule__grid__event__details">
+                  <div class="schedule__grid__event__title">
+                    {{session.session[0].name}}
+                  </div>
+                  <div class="schedule__grid__event__speakers">
+                    {% for speaker in session.session[0].speakers %}
+                    <p>{{speaker.first_name}} {{speaker.last_name}}, {{speaker.job_title}},
+                      <span class="company">{{speaker.company}}</span>
+                    </p>
+                    <!-- {% if forloop.last != true %}
+                                <br>
+                            {% endif %} -->
+                    {% endfor %}
+                  </div>
+                  <div class="schedule__grid__event__meta">
+                    <div class="d-flex justify-content-between flex-wrap">
+                      <div class="meta-details">
+                        {% if session.location and session.session[0].type != "Break" %}
+                        <span class="badge {{session.location}}">{{session.location}}</span>
+                        {{session.stream[0].name}} {% endif %}
+                      </div>
+                      {% if session.session[0].description.size > 50 %}
+                      <div class="display-controllers collapsed" data-toggle="collapse" data-target="#{{session.codename}}" aria-expanded="false"
+                        aria-controls="{{session.codename}}">
+                        <span class="show-ctrl">
+                          <i class="fas fa-chevron-down"></i>
+                          <small>More</small>
+                        </span>
+                        <span class="hide-ctrl">
+                          <i class="fas fa-chevron-up"></i>
+                          <small>Less</small>
+                        </span>
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="collapse" id="{{session.codename}}">
+                      <!-- <div class="card card-body"> -->
+                      {{session.session[0].description}}
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

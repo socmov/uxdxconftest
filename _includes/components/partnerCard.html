@@ -1,0 +1,30 @@
+<div class="partner-box card align-self-stretch">
+  <div class="card-img-top">
+    <img class="partner-profile" src="{{include.item.company[0].url}}" alt="{{include.item.name}}">
+  </div>
+  <div class="card-body">
+    <h4 class="card-title">{{include.item.name}}</h4>
+    <div class="card-text">
+      <div class="collapse {{include.item.codename}} show" id="{{include.item.codename}}1" aria-expanded="true">
+        {{include.item.bio | strip_html | truncate: 200}}
+      </div>
+      <div class="collapse {{include.item.codename}}" id="{{include.item.codename}}2">
+        {{include.item.bio}}
+      </div>
+      {% if include.item.bio.size > 200 %}
+      <div class="display-controllers collapsed" data-toggle="collapse" data-target=".{{include.item.codename}}" aria-expanded="false"
+        aria-controls="{{include.item.codename}}1 {{include.item.codename}}2">
+        <span class="show-ctrl">
+          <i class="fas fa-chevron-down"></i>
+          <small>More</small>
+        </span>
+        <span class="hide-ctrl">
+          <i class="fas fa-chevron-up"></i>
+          <small>Less</small>
+        </span>
+      </div>
+      {% endif %}
+      <a href="{{include.item.url}}" target="_blank" rel="noopener">{{include.item.url}}</a>
+    </div>
+  </div>
+</div>

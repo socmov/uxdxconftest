@@ -1,0 +1,31 @@
+---
+layout: default
+url_slug: home
+---
+
+{% assign pageContent = site.data.pages | where:"url_slug", page.url_slug %}
+{% assign pageContent = pageContent[0] %}
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron" style="
+  background: url('{{pageContent.header_image[0].url}}') no-repeat center;
+  background-size: cover;">
+  <div class="container d-flex justify-content-center">
+    <div class="header-logo-div">
+      <img src="{{site.baseurl}}/images/UXDX-White-LogoText-NoText.svg" class="header-logo" alt="UXDX">
+    </div>
+    <div class="">
+      <h1 class="display-5">Enhance your Process</h1>
+      <h3 class="display-4">
+        <em>Advance your Product</em>
+      </h3>
+      <h5>3<sup>rd</sup> - 5<sup>th</sup> October 2018</h5>
+      <p>Dublin</p>
+    </div>
+  </div>
+</div>
+
+
+{% for section in pageContent.sections %} {% include components/section.html section=section %} {% endfor %}
+
+
